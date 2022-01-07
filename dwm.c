@@ -119,6 +119,11 @@ typedef struct {
 	void (*arrange)(Monitor *);
 } Layout;
 
+typedef struct {
+    const Arg arg;
+    const char *class;
+} Raiseable;
+
 struct Monitor {
 	char ltsymbol[16];
 	float mfact;
@@ -215,6 +220,7 @@ static void seturgent(Client *c, int urg);
 static void showhide(Client *c);
 static void sigchld(int unused);
 static void spawn(const Arg *arg);
+static void run_or_raise(const Arg *arg);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static void tile(Monitor *);
@@ -1690,6 +1696,30 @@ spawn(const Arg *arg)
 		perror(" failed");
 		exit(EXIT_SUCCESS);
 	}
+}
+
+void
+run_or_raise(const Arg *arg)
+{
+  Client *c;
+  Monitor *m;
+  Raiseable *r = (Raiseable *)arg->v;
+  XClassHint ch = { NULL, NULL };
+  const char *class;
+  
+  for (m = mons; m; m = m->next) {
+    for (c = m->clients; c; c = c->next) {
+      XGetClassHint(dpy, c->win, &ch);
+      class = ch.res_class ? ch.res_class : broken;
+      // If we find matching class, raise it
+      if (strstr(class, r->class)) {
+        focus(c);
+        return;
+      }
+    }
+  }
+  // If we found no matching classes, launch it
+  spawn(&r->arg);
 }
 
 void
