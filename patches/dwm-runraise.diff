@@ -1,0 +1,177 @@
+diff --git a/config.h b/config.h
+index e58ec13..d8e8a2c 100644
+--- a/config.h
++++ b/config.h
+@@ -32,22 +32,22 @@ static const Rule rules[] = {
+ 	 *	WM_CLASS(STRING) = instance, class
+ 	 *	WM_NAME(STRING) = title
+ 	 */
+-	/* class       instance  title           tags mask  isfloating  isterminal   noswallow  monitor */
++	/* class       instance  title           tags mask  isfloating  isterminal   noswallow monitor */
+ 	{ "Alacritty", NULL,     NULL,           0,         0,          1,           0,        -1 },
+ 	{ NULL,        NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
+ };
+ 
+ /* layout(s) */
+-static const float mfact     = 0.65; /* factor of master area size [0.05..0.95] */
++static const float mfact     = 0.50; /* factor of master area size [0.05..0.95] */
+ static const int nmaster     = 1;    /* number of clients in master area */
+ static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
+ static const int lockfullscreen = 0; /* 1 will force focus on the fullscreen window */
+ 
+ static const Layout layouts[] = {
+ 	/* symbol     arrange function */
+-	{ "[]=",      tile },    /* first entry is default */
++	{ "[M]",      monocle }, /* first entry is default */
++	{ "[]=",      tile },    /* tiling behaviour */
+ 	{ "><>",      NULL },    /* no layout function means floating behavior */
+-	{ "[M]",      monocle },
+ };
+ 
+ /* key definitions */
+@@ -73,47 +73,53 @@ static const char *volumemute[]  = { "amixer", "set", "'Master'", "0%", NULL };
+ static const char *volumelower[]  = { "amixer", "set", "'Master'", "5%-", NULL };
+ static const char *volumeraise[]  = { "amixer", "set", "'Master'", "5%+", NULL };
+ 
++/* raiseables */
++static const Raiseable raiseables[] = {
++	/* arg           class */
++  { {.v = termcmd }, "Alacritty" },
++};
++
+ static Key keys[] = {
+-	/* modifier                     key                    function        argument */
+-	{ MODKEY,                       XK_c,                  spawn,          {.v = chromiumcmd } },
+-	{ MODKEY,                       XK_d,                  spawn,          {.v = dmenucmd } },
+-	{ MODKEY,                       XK_v,                  spawn,          {.v = termcmd } },
+-	{ MODKEY,                       XK_e,                  spawn,          {.v = emacscmd } },
+-	{ MODKEY,                       XK_b,                  togglebar,      {0} },
+-	{ MODKEY,                       XK_l,                  focusstack,     {.i = +1 } },
+-	{ MODKEY,                       XK_h,                  focusstack,     {.i = -1 } },
+-	{ MODKEY,                       XK_plus,               incnmaster,     {.i = +1 } },
+-	{ MODKEY,                       XK_minus,              incnmaster,     {.i = -1 } },
+-	{ MODKEY,                       XK_j,                  setmfact,       {.f = -0.05} },
+-	{ MODKEY,                       XK_k,                  setmfact,       {.f = +0.05} },
+-	{ MODKEY,                       XK_f,                  zoom,           {0} },
+-	{ MODKEY|ShiftMask,             XK_f,                  view,           {0} },
+-	{ MODKEY,                       XK_q,                  killclient,     {0} },
+-	{ MODKEY,                       XK_t,                  setlayout,      {.v = &layouts[0]} },
+-	{ MODKEY,                       XK_y,                  setlayout,      {.v = &layouts[1]} },
+-	{ MODKEY,                       XK_n,                  togglefullscr,  {0} },
+-	{ MODKEY|ShiftMask,             XK_y,                  setlayout,      {0} },
+-	{ MODKEY,                       XK_0,                  view,           {.ui = ~0 } },
+-	{ MODKEY|ShiftMask,             XK_0,                  tag,            {.ui = ~0 } },
+-	{ MODKEY,                       XK_comma,              focusmon,       {.i = -1 } },
+-	{ MODKEY,                       XK_period,             focusmon,       {.i = +1 } },
+-	{ MODKEY,                       XK_Left,               tagmon,         {.i = -1 } },
+-	{ MODKEY,                       XK_Right,              tagmon,         {.i = +1 } },
++	/* modifier                     key                       function        argument */
++	{ MODKEY,                       XK_c,                     spawn,          {.v = chromiumcmd } },
++	{ MODKEY,                       XK_d,                     spawn,          {.v = dmenucmd } },
++	{ MODKEY,                       XK_v,                     spawn,          {.v = termcmd } },
++	{ MODKEY,                       XK_e,                     spawn,          {.v = emacscmd } },
++	{ MODKEY,                       XK_b,                     togglebar,      {0} },
++	{ MODKEY,                       XK_l,                     focusstack,     {.i = +1 } },
++	{ MODKEY,                       XK_h,                     focusstack,     {.i = -1 } },
++	{ MODKEY,                       XK_plus,                  incnmaster,     {.i = +1 } },
++	{ MODKEY,                       XK_minus,                 incnmaster,     {.i = -1 } },
++	{ MODKEY,                       XK_j,                     setmfact,       {.f = -0.05} },
++	{ MODKEY,                       XK_k,                     setmfact,       {.f = +0.05} },
++	{ MODKEY,                       XK_f,                     zoom,           {0} },
++	{ MODKEY|ShiftMask,             XK_f,                     view,           {0} },
++	{ MODKEY,                       XK_q,                     killclient,     {0} },
++	{ MODKEY,                       XK_t,                     setlayout,      {.v = &layouts[1]} },
++	{ MODKEY,                       XK_y,                     setlayout,      {.v = &layouts[2]} },
++	{ MODKEY,                       XK_n,                     togglefullscr,  {0} },
++	{ MODKEY|ShiftMask,             XK_y,                     setlayout,      {0} },
++	{ MODKEY,                       XK_0,                     view,           {.ui = ~0 } },
++	{ MODKEY|ShiftMask,             XK_0,                     tag,            {.ui = ~0 } },
++	{ MODKEY,                       XK_comma,                 focusmon,       {.i = -1 } },
++	{ MODKEY,                       XK_period,                focusmon,       {.i = +1 } },
++	{ MODKEY,                       XK_Left,                  tagmon,         {.i = -1 } },
++	{ MODKEY,                       XK_Right,                 tagmon,         {.i = +1 } },
+ 	{ 0,                            XF86XK_AudioMute,         spawn,          {.v = volumemute } },
+ 	{ 0,                            XF86XK_AudioLowerVolume,  spawn,          {.v = volumelower } },
+ 	{ 0,                            XF86XK_AudioRaiseVolume,  spawn,          {.v = volumeraise } },
+-	TAGKEYS(                        XK_1,                                  0)
+-	TAGKEYS(                        XK_2,                                  1)
+-	TAGKEYS(                        XK_3,                                  2)
+-	TAGKEYS(                        XK_4,                                  3)
+-	TAGKEYS(                        XK_5,                                  4)
+-	TAGKEYS(                        XK_6,                                  5)
+-	TAGKEYS(                        XK_7,                                  6)
+-	TAGKEYS(                        XK_8,                                  7)
+-	TAGKEYS(                        XK_9,                                  8)
+-	{ MODKEY|ShiftMask,             XK_q,           quit,                  {0} },
+-	// { MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
+-	// { MODKEY,                       XK_space,  togglefloating, {0} },
++	TAGKEYS(                        XK_1,                                     0)
++	TAGKEYS(                        XK_2,                                     1)
++	TAGKEYS(                        XK_3,                                     2)
++	TAGKEYS(                        XK_4,                                     3)
++	TAGKEYS(                        XK_5,                                     4)
++	TAGKEYS(                        XK_6,                                     5)
++	TAGKEYS(                        XK_7,                                     6)
++	TAGKEYS(                        XK_8,                                     7)
++	TAGKEYS(                        XK_9,                                     8)
++	{ MODKEY|ShiftMask,             XK_q,                     quit,           {0} },
++	{ MODKEY,                       XK_m,                     setlayout,      {.v = &layouts[0]} },
++	{ MODKEY,                       XK_space,                 run_or_raise,   {.v = &raiseables[0]} },
+ };
+ 
+ /* button definitions */
+diff --git a/dwm.c b/dwm.c
+index 31f13c4..3a2314f 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -119,6 +119,11 @@ typedef struct {
+ 	void (*arrange)(Monitor *);
+ } Layout;
+ 
++typedef struct {
++    const Arg arg;
++    const char *class;
++} Raiseable;
++
+ struct Monitor {
+ 	char ltsymbol[16];
+ 	float mfact;
+@@ -215,6 +220,7 @@ static void seturgent(Client *c, int urg);
+ static void showhide(Client *c);
+ static void sigchld(int unused);
+ static void spawn(const Arg *arg);
++static void run_or_raise(const Arg *arg);
+ static void tag(const Arg *arg);
+ static void tagmon(const Arg *arg);
+ static void tile(Monitor *);
+@@ -1692,6 +1698,30 @@ spawn(const Arg *arg)
+ 	}
+ }
+ 
++void
++run_or_raise(const Arg *arg)
++{
++  Client *c;
++  Monitor *m;
++  Raiseable *r = (Raiseable *)arg->v;
++  XClassHint ch = { NULL, NULL };
++  const char *class;
++  
++  for (m = mons; m; m = m->next) {
++    for (c = m->clients; c; c = c->next) {
++      XGetClassHint(dpy, c->win, &ch);
++      class = ch.res_class ? ch.res_class : broken;
++      // If we find matching class, raise it
++      if (strstr(class, r->class)) {
++        focus(c);
++        return;
++      }
++    }
++  }
++  // If we found no matching classes, launch it
++  spawn(&r->arg);
++}
++
+ void
+ tag(const Arg *arg)
+ {
