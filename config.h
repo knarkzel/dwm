@@ -1,5 +1,8 @@
 /* See LICENSE file for copyright and license details. */
 
+// XF86*
+#include <X11/XF86keysym.h>
+
 /* appearance */
 static const unsigned int borderpx  = 0;        /* border pixel of windows */
 static const unsigned int snap      = 1;       /* snap pixel */
@@ -65,44 +68,52 @@ static const char *termcmd[]  = { "alacritty", NULL };
 static const char *chromiumcmd[]  = { "chromium", NULL };
 static const char *emacscmd[]  = { "emacs", NULL };
 
+/* audio */
+static const char *volumemute[]  = { "amixer", "set", "'Master'", "0%", NULL };
+static const char *volumelower[]  = { "amixer", "set", "'Master'", "5%-", NULL };
+static const char *volumeraise[]  = { "amixer", "set", "'Master'", "5%+", NULL };
+
 static Key keys[] = {
-	/* modifier                     key        function        argument */
-	{ MODKEY,                       XK_c,      spawn,          {.v = chromiumcmd } },
-	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
-	{ MODKEY,                       XK_v,      spawn,          {.v = termcmd } },
-	{ MODKEY,                       XK_e,      spawn,          {.v = emacscmd } },
-	{ MODKEY,                       XK_b,      togglebar,      {0} },
-	{ MODKEY,                       XK_l,      focusstack,     {.i = +1 } },
-	{ MODKEY,                       XK_h,      focusstack,     {.i = -1 } },
-	{ MODKEY,                       XK_plus,   incnmaster,     {.i = +1 } },
-	{ MODKEY,                       XK_minus,  incnmaster,     {.i = -1 } },
-	{ MODKEY,                       XK_j,      setmfact,       {.f = -0.05} },
-	{ MODKEY,                       XK_k,      setmfact,       {.f = +0.05} },
-	{ MODKEY,                       XK_f,      zoom,           {0} },
-	{ MODKEY|ShiftMask,             XK_f,      view,           {0} },
-	{ MODKEY,                       XK_q,      killclient,     {0} },
-	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_y,      setlayout,      {.v = &layouts[1]} },
+	/* modifier                     key                    function        argument */
+	{ MODKEY,                       XK_c,                  spawn,          {.v = chromiumcmd } },
+	{ MODKEY,                       XK_d,                  spawn,          {.v = dmenucmd } },
+	{ MODKEY,                       XK_v,                  spawn,          {.v = termcmd } },
+	{ MODKEY,                       XK_e,                  spawn,          {.v = emacscmd } },
+	{ MODKEY,                       XK_b,                  togglebar,      {0} },
+	{ MODKEY,                       XK_l,                  focusstack,     {.i = +1 } },
+	{ MODKEY,                       XK_h,                  focusstack,     {.i = -1 } },
+	{ MODKEY,                       XK_plus,               incnmaster,     {.i = +1 } },
+	{ MODKEY,                       XK_minus,              incnmaster,     {.i = -1 } },
+	{ MODKEY,                       XK_j,                  setmfact,       {.f = -0.05} },
+	{ MODKEY,                       XK_k,                  setmfact,       {.f = +0.05} },
+	{ MODKEY,                       XK_f,                  zoom,           {0} },
+	{ MODKEY|ShiftMask,             XK_f,                  view,           {0} },
+	{ MODKEY,                       XK_q,                  killclient,     {0} },
+	{ MODKEY,                       XK_t,                  setlayout,      {.v = &layouts[0]} },
+	{ MODKEY,                       XK_y,                  setlayout,      {.v = &layouts[1]} },
+	{ MODKEY,                       XK_n,                  togglefullscr,  {0} },
+	{ MODKEY|ShiftMask,             XK_y,                  setlayout,      {0} },
+	{ MODKEY,                       XK_0,                  view,           {.ui = ~0 } },
+	{ MODKEY|ShiftMask,             XK_0,                  tag,            {.ui = ~0 } },
+	{ MODKEY,                       XK_comma,              focusmon,       {.i = -1 } },
+	{ MODKEY,                       XK_period,             focusmon,       {.i = +1 } },
+	{ MODKEY,                       XK_Left,               tagmon,         {.i = -1 } },
+	{ MODKEY,                       XK_Right,              tagmon,         {.i = +1 } },
+	{ 0,                            XF86XK_AudioMute,         spawn,          {.v = volumemute } },
+	{ 0,                            XF86XK_AudioLowerVolume,  spawn,          {.v = volumelower } },
+	{ 0,                            XF86XK_AudioRaiseVolume,  spawn,          {.v = volumeraise } },
+	TAGKEYS(                        XK_1,                                  0)
+	TAGKEYS(                        XK_2,                                  1)
+	TAGKEYS(                        XK_3,                                  2)
+	TAGKEYS(                        XK_4,                                  3)
+	TAGKEYS(                        XK_5,                                  4)
+	TAGKEYS(                        XK_6,                                  5)
+	TAGKEYS(                        XK_7,                                  6)
+	TAGKEYS(                        XK_8,                                  7)
+	TAGKEYS(                        XK_9,                                  8)
+	{ MODKEY|ShiftMask,             XK_q,           quit,                  {0} },
 	// { MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
-	{ MODKEY,                       XK_n,      togglefullscr,  {0} },
-	{ MODKEY|ShiftMask,             XK_y,      setlayout,      {0} },
 	// { MODKEY,                       XK_space,  togglefloating, {0} },
-	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
-	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
-	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
-	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
-	{ MODKEY,                       XK_Left,   tagmon,         {.i = -1 } },
-	{ MODKEY,                       XK_Right,  tagmon,         {.i = +1 } },
-	TAGKEYS(                        XK_1,                      0)
-	TAGKEYS(                        XK_2,                      1)
-	TAGKEYS(                        XK_3,                      2)
-	TAGKEYS(                        XK_4,                      3)
-	TAGKEYS(                        XK_5,                      4)
-	TAGKEYS(                        XK_6,                      5)
-	TAGKEYS(                        XK_7,                      6)
-	TAGKEYS(                        XK_8,                      7)
-	TAGKEYS(                        XK_9,                      8)
-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 };
 
 /* button definitions */
