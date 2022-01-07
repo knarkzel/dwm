@@ -9,8 +9,8 @@ In order to build dwm you need the Xlib header files.
 
 Arch Linux
 ----------
-freetype2, libx11 libxft, libxinerama (required)
-alacritty, dmenu                      (recommended)
+freetype2 libx11 libxft libxinerama (required)
+alacritty dmenu                     (recommended)
 
 Installation
 ------------
