@@ -1738,7 +1738,10 @@ tagmon(const Arg *arg)
 {
 	if (!selmon->sel || !mons->next)
 		return;
+    Client *current = selmon->sel;
 	sendmon(selmon->sel, dirtomon(arg->i));
+    focus(current);
+    arrange(selmon);
 }
 
 void
