@@ -77,14 +77,17 @@ static const char *volumeraise[]  = { "amixer", "set", "'Master'", "5%+", NULL }
 static const Raiseable raiseables[] = {
 	/* arg           class */
   { {.v = termcmd }, "Alacritty" },
+  { {.v = chromiumcmd }, "Chromium" },
+  { {.v = emacscmd }, "Emacs" },
 };
 
 static Key keys[] = {
 	/* modifier                     key                       function        argument */
-	{ MODKEY,                       XK_c,                     spawn,          {.v = chromiumcmd } },
+	{ MODKEY,                       XK_space,                 run_or_raise,   {.v = &raiseables[0]} },
 	{ MODKEY,                       XK_d,                     spawn,          {.v = dmenucmd } },
-	{ MODKEY,                       XK_v,                     spawn,          {.v = termcmd } },
-	{ MODKEY,                       XK_e,                     spawn,          {.v = emacscmd } },
+	{ MODKEY,                       XK_v,                     run_or_raise,   {.v = &raiseables[0] } },
+	{ MODKEY,                       XK_c,                     run_or_raise,   {.v = &raiseables[1] } },
+	{ MODKEY,                       XK_e,                     run_or_raise,   {.v = &raiseables[2] } },
 	{ MODKEY,                       XK_b,                     togglebar,      {0} },
 	{ MODKEY,                       XK_l,                     focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_h,                     focusstack,     {.i = -1 } },
@@ -119,7 +122,6 @@ static Key keys[] = {
 	TAGKEYS(                        XK_9,                                     8)
 	{ MODKEY|ShiftMask,             XK_q,                     quit,           {0} },
 	{ MODKEY,                       XK_m,                     setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_space,                 run_or_raise,   {.v = &raiseables[0]} },
 };
 
 /* button definitions */

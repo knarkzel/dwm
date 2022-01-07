@@ -1714,6 +1714,7 @@ run_or_raise(const Arg *arg)
       // If we find matching class, raise it
       if (strstr(class, r->class)) {
         focus(c);
+		arrange(selmon);
         return;
       }
     }
