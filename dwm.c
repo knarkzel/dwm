@@ -1726,21 +1726,32 @@ run_or_raise(const Arg *arg)
   Raiseable *r = (Raiseable *)arg->v;
   XClassHint ch = { NULL, NULL };
   const char *class;
+  int len = 0;
+  int index = 0;
+  Client *clients[10] = { 0 };
   
   for (m = mons; m; m = m->next) {
     for (c = m->clients; c; c = c->next) {
       XGetClassHint(dpy, c->win, &ch);
       class = ch.res_class ? ch.res_class : broken;
-      // If we find matching class, raise it
+      // If we find matching class, add it to clients
       if (strstr(class, r->class)) {
-        focus(c);
-		arrange(selmon);
-        return;
+        if (c == selmon->sel)
+          index = len;
+        clients[len] = c;
+        len++;
       }
     }
   }
+  fprintf(stderr, "len: %d, index: %d", len, index);
   // If we found no matching classes, launch it
-  spawn(&r->arg);
+  if (len == 0) {
+    spawn(&r->arg);
+  } else {
+    c = clients[(index + 1) % len];
+    focus(c);
+    arrange(selmon);
+  }
 }
 
 void
