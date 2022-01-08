@@ -90,7 +90,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_c,                     run_or_raise,   {.v = &raiseables[1] } },
 	{ MODKEY|ShiftMask,             XK_c,                     spawn,          {.v = chromiumcmd } },
 	{ MODKEY,                       XK_e,                     run_or_raise,   {.v = &raiseables[2] } },
-	{ MODKEY|ShiftMask,             XK_e,                     spawn,          {.v = chromiumcmd } },
+	{ MODKEY|ShiftMask,             XK_e,                     spawn,          {.v = emacscmd } },
 	{ MODKEY,                       XK_b,                     togglebar,      {0} },
 	{ MODKEY,                       XK_l,                     focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_h,                     focusstack,     {.i = -1 } },
