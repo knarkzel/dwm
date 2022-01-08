@@ -221,6 +221,7 @@ static void showhide(Client *c);
 static void sigchld(int unused);
 static void spawn(const Arg *arg);
 static void run_or_raise(const Arg *arg);
+static void cycle(const Arg *arg);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static void tile(Monitor *);
@@ -1698,10 +1699,24 @@ spawn(const Arg *arg)
 	}
 }
 
-struct Node {
+void
+cycle(const Arg *arg) {
   Client *c;
-  struct Node *next;
-};
+  for (c = selmon->clients; c; c = c->next) {
+    if (c == selmon->sel) {
+      c = c->next;
+      break;
+    }
+  }
+  if (c) {
+    focus(c);
+  } else if (selmon->clients) {
+    focus(selmon->clients);
+  } else {
+    return;
+  }
+  arrange(selmon);
+}
 
 void
 run_or_raise(const Arg *arg)
