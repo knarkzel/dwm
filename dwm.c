@@ -1698,6 +1698,11 @@ spawn(const Arg *arg)
 	}
 }
 
+struct Node {
+  Client *c;
+  struct Node *next;
+};
+
 void
 run_or_raise(const Arg *arg)
 {
@@ -1706,6 +1711,8 @@ run_or_raise(const Arg *arg)
   Raiseable *r = (Raiseable *)arg->v;
   XClassHint ch = { NULL, NULL };
   const char *class;
+  struct Node *head = NULL;
+  struct Node *current = NULL;
   
   for (m = mons; m; m = m->next) {
     for (c = m->clients; c; c = c->next) {
@@ -1713,14 +1720,40 @@ run_or_raise(const Arg *arg)
       class = ch.res_class ? ch.res_class : broken;
       // If we find matching class, raise it
       if (strstr(class, r->class)) {
-        focus(c);
-		arrange(selmon);
-        return;
+        if (current == NULL) {
+          current = (struct Node *)malloc(sizeof(struct Node));
+          current->c = c;
+          head = current;
+        } else {
+          current->next = (struct Node *)malloc(sizeof(struct Node));
+          current->next->c = c;
+          current = current->next;
+        }
       }
     }
   }
-  // If we found no matching classes, launch it
-  spawn(&r->arg);
+  // If head is NULL, we found no matches, so launch it
+  if (head == NULL) {
+    spawn(&r->arg);
+    return;
+  }
+  // Try and find if any one corresponds to current client
+  current = head;
+  while (current != NULL) {
+    if (current->c == selmon->sel) {
+      if (current->next != NULL) {
+        c = current->next->c;
+      } else {
+        c = head->c;
+      }
+      focus(c);
+      arrange(selmon);
+      return;
+    }
+  }
+  // If it's not open in any, just go to first
+  focus(head->c);
+  arrange(selmon);
 }
 
 void
