@@ -69,9 +69,13 @@ static const char *chromiumcmd[]  = { "chromium", NULL };
 static const char *emacscmd[]  = { "emacs", NULL };
 
 /* audio */
-static const char *volumemute[]  = { "amixer set 'Master' 0%", NULL };
-static const char *volumelower[]  = { "amixer set 'Master' 5%-", NULL };
-static const char *volumeraise[]  = { "amixer set 'Master' 5%+", NULL };
+static const char *volumemute[]  = { "amixer", "set", "'Master'", "0%", NULL };
+static const char *volumelower[]  = { "amixer", "set", "'Master'", "5%-", NULL };
+static const char *volumeraise[]  = { "amixer", "set", "'Master'", "5%+", NULL };
+
+/* print */
+#define Print 0x0000ff61
+static const char *printdesktop[]  = { "scrot", "-s", NULL };
 
 /* raiseables */
 static const Raiseable raiseables[] = {
@@ -113,6 +117,8 @@ static Key keys[] = {
 	{ 0,                            XF86XK_AudioMute,         spawn,          {.v = volumemute } },
 	{ 0,                            XF86XK_AudioLowerVolume,  spawn,          {.v = volumelower } },
 	{ 0,                            XF86XK_AudioRaiseVolume,  spawn,          {.v = volumeraise } },
+	{ 0,                            Print,                    spawn,          SHCMD("~/.scripts/print.sh") },
+	{ 0|ShiftMask,                  Print,                    spawn,          {.v = printdesktop } },
 	TAGKEYS(                        XK_1,                                     0)
 	TAGKEYS(                        XK_2,                                     1)
 	TAGKEYS(                        XK_3,                                     2)

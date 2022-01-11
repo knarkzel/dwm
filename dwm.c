@@ -1743,7 +1743,6 @@ run_or_raise(const Arg *arg)
       }
     }
   }
-  fprintf(stderr, "len: %d, index: %d", len, index);
   // If we found no matching classes, launch it
   if (len == 0) {
     spawn(&r->arg);
