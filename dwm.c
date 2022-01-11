@@ -1750,8 +1750,10 @@ run_or_raise(const Arg *arg)
   } else {
     c = clients[(index + 1) % len];
     // Goto monitor
-    const Arg monitor = {.i = c->mon->num};
-    focusmon(&monitor);
+    if (selmon != c->mon) {
+      const Arg monitor = {.i = c->mon->num};
+      focusmon(&monitor);
+    }
     // Goto tags
     const Arg tags = {.ui = c->tags};
     view(&tags);
