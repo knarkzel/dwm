@@ -805,7 +805,7 @@ drawbar(Monitor *m)
 	}
 	w = blw = TEXTW(m->ltsymbol);
 	drw_setscheme(drw, scheme[SchemeNorm]);
-	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
+	/* x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0); */
 
 	if ((w = m->ww - tw - x) > bh) {
 		if (m->sel) {
@@ -1749,6 +1749,13 @@ run_or_raise(const Arg *arg)
     spawn(&r->arg);
   } else {
     c = clients[(index + 1) % len];
+    // Goto monitor
+    const Arg monitor = {.i = c->mon->num};
+    focusmon(&monitor);
+    // Goto tags
+    const Arg tags = {.ui = c->tags};
+    view(&tags);
+    // Focus client
     focus(c);
     arrange(selmon);
   }
