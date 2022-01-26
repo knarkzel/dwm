@@ -3,6 +3,16 @@
 // XF86*
 #include <X11/XF86keysym.h>
 
+/* solarized colors http://ethanschoonover.com/solarized */
+static const char s_base03[]        = "#002b36";
+static const char s_base02[]        = "#073642";
+static const char s_base01[]        = "#586e75";
+static const char s_base00[]        = "#657b83";
+static const char s_base0[]         = "#839496";
+static const char s_base1[]         = "#93a1a1";
+static const char s_base2[]         = "#eee8d5";
+static const char s_base3[]         = "#fdf6e3";
+
 /* appearance */
 static const unsigned int borderpx  = 0;        /* border pixel of windows */
 static const unsigned int snap      = 1;       /* snap pixel */
@@ -12,16 +22,11 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 0;        /* 0 means bottom bar */
 static const char *fonts[]          = { "monospace:size=18" };
 static const char dmenufont[]       = "monospace:size=18";
-static const char col_gray1[]       = "#282828";
-static const char col_gray2[]       = "#ffffff";
-static const char col_gray3[]       = "#ebdbb2";
-static const char col_gray4[]       = "#fbf1c7";
-static const char col_cyan[]        = "#928374";
 
 static const char *colors[][3]      = {
-	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+	/*               fg        bg       border   */
+	[SchemeNorm] = { s_base00, s_base3, s_base02 },
+	[SchemeSel]  = { s_base00, s_base2, s_base02 },
 };
 
 /* tagging */
@@ -40,7 +45,7 @@ static const Rule rules[] = {
 /* layout(s) */
 static const float mfact     = 0.50; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
-static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
+static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen = 0; /* 1 will force focus on the fullscreen window */
 
 static const Layout layouts[] = {
@@ -63,7 +68,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", s_base3, "-nf", s_base00, "-sb", s_base2, "-sf", s_base00, NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *chromiumcmd[]  = { "chromium", NULL };
 static const char *emacscmd[]  = { "emacs", NULL };
@@ -96,8 +101,6 @@ static Key keys[] = {
 	{ MODKEY,                       XK_e,                     run_or_raise,   {.v = &raiseables[2] } },
 	{ MODKEY|ShiftMask,             XK_e,                     spawn,          {.v = emacscmd } },
 	{ MODKEY,                       XK_b,                     togglebar,      {0} },
-	{ MODKEY,                       XK_l,                     focusstack,     {.i = +1 } },
-	{ MODKEY,                       XK_h,                     focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_plus,                  incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_minus,                 incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_j,                     setmfact,       {.f = -0.05} },
@@ -110,15 +113,16 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_y,                     setlayout,      {0} },
 	{ MODKEY,                       XK_0,                     view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,                     tag,            {.ui = ~0 } },
-	{ MODKEY,                       XK_Left,                  focusmon,       {.i = -1 } },
-	{ MODKEY,                       XK_Right,                 focusmon,       {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_h,                     tagmon,         {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_l,                     tagmon,         {.i = +1 } },
+	{ MODKEY,                       XK_h,                     focusmon,       {.i = -1 } },
+	{ MODKEY,                       XK_l,                     focusmon,       {.i = +1 } },
+	{ MODKEY,                       XK_Left,                  tagmon,         {.i = -1 } },
+	{ MODKEY,                       XK_Right,                 tagmon,         {.i = +1 } },
 	{ 0,                            XF86XK_AudioMute,         spawn,          {.v = volumemute } },
 	{ 0,                            XF86XK_AudioLowerVolume,  spawn,          {.v = volumelower } },
 	{ 0,                            XF86XK_AudioRaiseVolume,  spawn,          {.v = volumeraise } },
-	{ 0,                            Print,                    spawn,          SHCMD("~/.scripts/print.sh") },
+	{ 0,                            Print,                    spawn,          SHCMD("~/.scripts/print") },
 	{ 0|ShiftMask,                  Print,                    spawn,          {.v = printdesktop } },
+	{ MODKEY,                       XK_o,                     spawn,          SHCMD("~/.scripts/launch") },
 	TAGKEYS(                        XK_1,                                     0)
 	TAGKEYS(                        XK_2,                                     1)
 	TAGKEYS(                        XK_3,                                     2)
