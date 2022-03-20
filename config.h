@@ -86,7 +86,7 @@ static const char *printdesktop[]  = { "scrot", "-s", NULL };
 static const Raiseable raiseables[] = {
 	/* arg           class */
   { {.v = termcmd }, "Alacritty" },
-  { {.v = firefoxcmd }, "Firefox" },
+  { {.v = firefoxcmd }, "firefox" },
   { {.v = emacscmd }, "Emacs" },
 };
 
@@ -97,7 +97,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_v,                     run_or_raise,   {.v = &raiseables[0] } },
 	{ MODKEY|ShiftMask,             XK_v,                     spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_c,                     run_or_raise,   {.v = &raiseables[1] } },
-	{ MODKEY|ShiftMask,             XK_c,                     spawn,          {.v = cmd } },
+	{ MODKEY|ShiftMask,             XK_c,                     spawn,          {.v = firefoxcmd } },
 	{ MODKEY,                       XK_f,                     run_or_raise,   {.v = &raiseables[2] } },
 	{ MODKEY|ShiftMask,             XK_f,                     spawn,          {.v = emacscmd } },
 	{ MODKEY,                       XK_b,                     togglebar,      {0} },
