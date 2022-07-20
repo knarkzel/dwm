@@ -7,11 +7,11 @@
 static const char s_base03[]        = "#002b36";
 static const char s_base02[]        = "#073642";
 static const char s_base01[]        = "#586e75";
-static const char s_base00[]        = "#657b83";
+static const char s_base00[]        = "#605a52";
 static const char s_base0[]         = "#839496";
 static const char s_base1[]         = "#93a1a1";
-static const char s_base2[]         = "#eee8d5";
-static const char s_base3[]         = "#fdf6e3";
+static const char s_base2[]         = "#e4ddd2";
+static const char s_base3[]         = "#f7f3ee";
 
 /* appearance */
 static const unsigned int borderpx  = 0;        /* border pixel of windows */
